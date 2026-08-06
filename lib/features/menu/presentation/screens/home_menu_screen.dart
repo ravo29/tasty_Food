@@ -9,6 +9,7 @@ import 'package:tasty_food/features/menu/providers/food_list_provider.dart';
 import 'package:tasty_food/features/menu/presentation/widgets/category_chip.dart';
 import 'package:tasty_food/features/menu/presentation/widgets/food_card.dart';
 import 'package:tasty_food/features/menu/presentation/screens/food_detail_screen.dart';
+
 class HomeMenuScreen extends ConsumerStatefulWidget {
   const HomeMenuScreen({super.key});
 
@@ -17,7 +18,6 @@ class HomeMenuScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeMenuScreenState extends ConsumerState<HomeMenuScreen> {
-  int _currentBottomNavIndex = 0;
   final List<String> categories = ['All', 'Burger', 'Pasta', 'Chicken', 'Dessert'];
 
   @override
@@ -294,58 +294,47 @@ class _HomeMenuScreenState extends ConsumerState<HomeMenuScreen> {
 
               const SizedBox(height: 16),
 
-              if (filteredDishes.isEmpty) const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child: Center(
-                        child: Text(
-                          'Aucun plat trouvé.',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ),
-                    ) else GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: filteredDishes.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                        childAspectRatio: 0.8,
-                      ),
-                      itemBuilder: (context, index) {
-                        final dish = filteredDishes[index];
-                        return FoodCard(
-                          dish: dish,
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => FoodDetailScreen(dish: dish.toMap()),
-                              ),
-                            );
-                          },
-                          onFavoriteToggle: () {
-                            foodListNotifier.toggleFavorite(dish.id);
-                          },
+              if (filteredDishes.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40.0),
+                  child: Center(
+                    child: Text(
+                      'Aucun plat trouvé.',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ),
+                )
+              else
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: filteredDishes.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemBuilder: (context, index) {
+                    final dish = filteredDishes[index];
+                    return FoodCard(
+                      dish: dish,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => FoodDetailScreen(dish: dish.toMap()),
+                          ),
                         );
                       },
-                    ),
+                      onFavoriteToggle: () {
+                        foodListNotifier.toggleFavorite(dish.id);
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentBottomNavIndex,
-        onTap: (index) => setState(() => _currentBottomNavIndex = index),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: primaryGreen,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_outlined), label: 'Shop'),
-          BottomNavigationBarItem(icon: Icon(Icons.assignment_outlined), label: 'Lessons'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-        ],
       ),
     );
   }
