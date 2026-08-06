@@ -1,7 +1,6 @@
 name: tasty_food
 description: App e-commerce de restauration Flutter avec Riverpod
 
-# Ajoute ce bloc :
 environment:
   sdk: '>=3.0.0 <4.0.0'
   flutter: ">=3.10.0"
@@ -19,6 +18,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
+  uses-material-design: true  # <- AJOUTÉ : Indispensable pour afficher les icônes Material
+
   assets:
     - assets/images/
     - assets/icons/

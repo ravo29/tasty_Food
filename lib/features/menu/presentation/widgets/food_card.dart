@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/food_item.dart';
+import 'package:tasty_food/features/menu/models/food_item.dart';
 
 class FoodCard extends StatelessWidget {
   final FoodItem dish;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasty_food/features/menu/presentation/screens/home_menu_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -10,11 +11,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = const [
-    Center(child: Text('Écran Accueil / Menu')),
-    Center(child: Text('Écran Panier')),
-    Center(child: Text('Écran Favoris')),
-    Center(child: Text('Écran Profil')),
+  static final List<Widget> _screens = [
+    const HomeMenuScreen(),
+    const Center(child: Text('Écran Panier')),
+    const Center(child: Text('Écran Favoris')),
+    const Center(child: Text('Écran Profil')),
   ];
 
   @override

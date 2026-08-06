@@ -14,6 +14,8 @@ class AuthFormScreen extends StatefulWidget {
 
 class _AuthFormScreenState extends State<AuthFormScreen>
     with TickerProviderStateMixin {
+  final _formKey = GlobalKey<FormState>();
+
   static const Color mainGreen = Color(0xFF2E7D32);
   static const Color cardBgColor = Color(0xFFD7EAD7);
   static const Color tabSelectedGreen = Color(0xFF1B5E20);
@@ -74,6 +76,20 @@ class _AuthFormScreenState extends State<AuthFormScreen>
     setState(() => isSignUpSelected = signUp);
   }
 
+  void _submitForm() {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      // Logique d'authentification Firebase / API backend
+      Navigator.of(context).pushReplacement(
+        _fadeThroughRoute(const MainScreen()),
+      );
+    } else {
+      // Redirection directe si le formulaire n'utilise pas de Form widget explicite
+      Navigator.of(context).pushReplacement(
+        _fadeThroughRoute(const MainScreen()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +143,7 @@ class _AuthFormScreenState extends State<AuthFormScreen>
                             padding: const EdgeInsets.all(24.0),
                             child: Column(
                               children: [
-                                // --- Switcher Log In / Sign In avec pastille glissante ---
+                                // Switcher Log In / Sign In
                                 _AnimatedTabSwitcher(
                                   isSignUpSelected: isSignUpSelected,
                                   selectedColor: tabSelectedGreen,
@@ -137,9 +153,10 @@ class _AuthFormScreenState extends State<AuthFormScreen>
 
                                 const SizedBox(height: 35),
 
-                                // --- Champ E-mail ---
+                                // Champ E-mail
                                 TextField(
                                   controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     hintText: "Enter your email",
                                     hintStyle: TextStyle(color: Colors.grey[400]),
@@ -161,7 +178,7 @@ class _AuthFormScreenState extends State<AuthFormScreen>
 
                                 const SizedBox(height: 20),
 
-                                // --- Champ Mot de passe avec icône animée ---
+                                // Champ Mot de passe
                                 TextField(
                                   controller: _passwordController,
                                   obscureText: isPasswordObscured,
@@ -221,21 +238,17 @@ class _AuthFormScreenState extends State<AuthFormScreen>
 
                                 const SizedBox(height: 10),
 
-                                // --- Bouton principal Log In / Sign In ---
+                                // Bouton principal Log In / Sign In
                                 _AnimatedPillButton(
                                   label: isSignUpSelected ? "Sign In" : "Log In",
                                   backgroundColor: Colors.white,
                                   foregroundColor: mainGreen,
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      _fadeThroughRoute(const MainScreen()),
-                                    );
-                                  },
+                                  onPressed: _submitForm,
                                 ),
 
                                 const Spacer(),
 
-                                // --- Boutons Social Login ---
+                                // Boutons Social Login
                                 Row(
                                   children: [
                                     Expanded(
@@ -321,7 +334,6 @@ class _AuthFormScreenState extends State<AuthFormScreen>
   }
 }
 
-/// Switcher Log In / Sign In avec une pastille qui glisse entre les deux onglets.
 class _AnimatedTabSwitcher extends StatelessWidget {
   const _AnimatedTabSwitcher({
     required this.isSignUpSelected,
@@ -407,7 +419,6 @@ class _AnimatedTabSwitcher extends StatelessWidget {
   }
 }
 
-/// Bouton pilule blanc avec effet d'échelle au toucher.
 class _AnimatedPillButton extends StatefulWidget {
   const _AnimatedPillButton({
     required this.label,

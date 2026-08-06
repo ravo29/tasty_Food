@@ -1,4 +1,3 @@
-// lib/features/welcome_animation/presentation/screens/welcome_animation_screen.dart
 import 'package:flutter/material.dart';
 import 'package:tasty_food/core/constants/app_assets.dart';
 import 'package:tasty_food/auth/presentation/screens/login_screen.dart';
@@ -196,7 +195,6 @@ class _WelcomeAnimationScreenState extends State<WelcomeAnimationScreen>
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                // Indicateur de page : le point actif "respire" doucement.
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -208,7 +206,6 @@ class _WelcomeAnimationScreenState extends State<WelcomeAnimationScreen>
                                   ],
                                 ),
 
-                                // Textes d'introduction
                                 FadeTransition(
                                   opacity: _textFade,
                                   child: const Column(
@@ -238,14 +235,13 @@ class _WelcomeAnimationScreenState extends State<WelcomeAnimationScreen>
                                   ),
                                 ),
 
-                                // Bouton Get Started avec fondu + feedback tactile
                                 FadeTransition(
                                   opacity: _buttonFade,
                                   child: _AnimatedGetStartedButton(
                                     foregroundColor: onboardingOrange,
                                     onPressed: () {
                                       Navigator.of(context).pushReplacement(
-                                        _fadeThroughRoute(const LoginScreen()),
+                                      _fadeThroughRoute(const LoginScreen()),
                                       );
                                     },
                                   ),
@@ -291,7 +287,6 @@ class _WelcomeAnimationScreenState extends State<WelcomeAnimationScreen>
   }
 }
 
-/// Point de pagination actif qui pulse légèrement en boucle.
 class _PulsingDot extends StatelessWidget {
   const _PulsingDot({required this.controller});
 
@@ -320,7 +315,6 @@ class _PulsingDot extends StatelessWidget {
   }
 }
 
-/// Bouton "Get Started" avec un effet d'échelle au toucher.
 class _AnimatedGetStartedButton extends StatefulWidget {
   const _AnimatedGetStartedButton({
     required this.foregroundColor,
