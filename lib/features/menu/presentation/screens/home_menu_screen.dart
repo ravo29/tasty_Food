@@ -9,6 +9,15 @@ import 'package:tasty_food/features/profile/providers/profile_provider.dart';
 // Détail
 import 'package:tasty_food/features/menu/presentation/screens/food_detail_screen.dart';
 
+class _AppAssets {
+  static const String burgerCategory = 'assets/images/burger.png';
+  static const String pizzaCategory = 'assets/images/MargheritaPizza.png';
+  static const String chickenCategory = 'assets/images/RoastChicken.png';
+  static const String pastaCategory = 'assets/images/SpaghettiCarbonara.png';
+  static const String drinksCategory = 'assets/images/Cappuccino.png';
+  static const String dessertCategory = 'assets/images/ChocolateCake.png';
+}
+
 class HomeMenuScreen extends ConsumerWidget {
   const HomeMenuScreen({super.key});
 
@@ -199,7 +208,7 @@ class HomeMenuScreen extends ConsumerWidget {
                         bottom: -10,
                         top: -10,
                         child: Image.asset(
-                          'assets/images/BeefBurger.png',
+                          _AppAssets.burgerCategory,
                           fit: BoxFit.contain,
                           errorBuilder: (_, __, ___) => const Icon(Icons.fastfood, size: 80, color: Colors.white24),
                         ),
@@ -232,31 +241,15 @@ class HomeMenuScreen extends ConsumerWidget {
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   child: Row(
-                    children: ['All', 'Burger', 'Pizza', 'Chicken', 'Drinks'].map((category) {
-                      final isSelected = selectedCategory == category;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ChoiceChip(
-                          label: Text(category),
-                          labelStyle: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black87,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
-                          selected: isSelected,
-                          selectedColor: primaryGreen,
-                          backgroundColor: Colors.grey.shade200,
-                          side: BorderSide.none,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          onSelected: (selected) {
-                            if (selected) {
-                              ref.read(selectedCategoryProvider.notifier).state = category;
-                            }
-                          },
-                        ),
-                      );
-                    }).toList(),
+                    children: [
+                      _buildCategoryChip(context, ref, 'All', null, selectedCategory, primaryGreen),
+                      _buildCategoryChip(context, ref, 'Burger', _AppAssets.burgerCategory, selectedCategory, primaryGreen),
+                      _buildCategoryChip(context, ref, 'Pizza', _AppAssets.pizzaCategory, selectedCategory, primaryGreen),
+                      _buildCategoryChip(context, ref, 'Chicken', _AppAssets.chickenCategory, selectedCategory, primaryGreen),
+                      _buildCategoryChip(context, ref, 'Pasta', _AppAssets.pastaCategory, selectedCategory, primaryGreen),
+                      _buildCategoryChip(context, ref, 'Drinks', _AppAssets.drinksCategory, selectedCategory, primaryGreen),
+                      _buildCategoryChip(context, ref, 'Dessert', _AppAssets.dessertCategory, selectedCategory, primaryGreen),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -320,6 +313,7 @@ class HomeMenuScreen extends ConsumerWidget {
                         final String name = dish.name;
                         final String imageUrl = dish.image;
                         final double price = double.tryParse(dish.price) ?? 0.0;
+                        final String calories = dish.calories;
 
                         final bool isFav = favoriteIds.contains(id);
 
@@ -415,13 +409,13 @@ class HomeMenuScreen extends ConsumerWidget {
                                               color: Colors.grey.shade100,
                                               borderRadius: BorderRadius.circular(12),
                                             ),
-                                            child: const Row(
+                                            child: Row(
                                               children: [
-                                                Text('🔥', style: TextStyle(fontSize: 10)),
-                                                SizedBox(width: 2),
+                                                const Text('🔥', style: TextStyle(fontSize: 10)),
+                                                const SizedBox(width: 2),
                                                 Text(
-                                                  '270 Kal',
-                                                  style: TextStyle(
+                                                  calories,
+                                                  style: const TextStyle(
                                                     fontSize: 10,
                                                     fontWeight: FontWeight.w600,
                                                     color: Colors.black54,
@@ -460,6 +454,65 @@ class HomeMenuScreen extends ConsumerWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryChip(
+    BuildContext context,
+    WidgetRef ref,
+    String category,
+    String? imagePath,
+    String selectedCategory,
+    Color primaryGreen,
+  ) {
+    final isSelected = selectedCategory == category;
+    
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: InkWell(
+        onTap: () {
+          ref.read(selectedCategoryProvider.notifier).state = category;
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? primaryGreen : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isSelected ? primaryGreen : Colors.grey.shade200,
+            ),
+          ),
+          child: Row(
+            children: [
+              if (imagePath != null) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    imagePath,
+                    width: 24,
+                    height: 24,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.restaurant,
+                      size: 20,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                category,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black87,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontSize: 14,
+                ),
+              ),
+            ],
           ),
         ),
       ),
