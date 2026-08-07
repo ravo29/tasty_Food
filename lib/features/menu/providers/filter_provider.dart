@@ -8,7 +8,7 @@ final searchQueryProvider = StateProvider<String>((ref) => '');
 
 final menuProductsProvider = foodListProvider;
 
-final filteredMenuProvider = Provider<List<FoodItem>>((ref) {
+final filteredMenuProvider = Provider<AsyncValue<List<FoodItem>>>((ref) {
   final asyncProducts = ref.watch(menuProductsProvider);
   final category = ref.watch(selectedCategoryProvider);
   final sortBy = ref.watch(sortByPriceProvider);
@@ -33,9 +33,9 @@ final filteredMenuProvider = Provider<List<FoodItem>>((ref) {
         filtered.sort((a, b) => b.price.compareTo(a.price));
       }
 
-      return filtered;
+      return AsyncValue.data(filtered);
     },
-    loading: () => [],
-    error: (_, __) => [],
+    loading: () => const AsyncValue.loading(),
+    error: (error, stack) => AsyncValue.error(error, stack),
   );
 });
