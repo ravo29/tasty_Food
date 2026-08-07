@@ -27,17 +27,9 @@ final filteredMenuProvider = Provider<AsyncValue<List<FoodItem>>>((ref) {
     }
 
     if (sortBy == 'price_asc') {
-      filtered.sort((a, b) {
-        final priceA = double.tryParse(a.price) ?? 0.0;
-        final priceB = double.tryParse(b.price) ?? 0.0;
-        return priceA.compareTo(priceB);
-      });
+      filtered.sort((a, b) => a.price.compareTo(b.price));
     } else if (sortBy == 'price_desc') {
-      filtered.sort((a, b) {
-        final priceA = double.tryParse(a.price) ?? 0.0;
-        final priceB = double.tryParse(b.price) ?? 0.0;
-        return priceB.compareTo(priceA);
-      });
+      filtered.sort((a, b) => b.price.compareTo(a.price));
     }
 
     return filtered;

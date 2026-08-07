@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tasty_food/features/welcome_animation/presentation/screens/welcome_animation_screen.dart';
+import 'package:tasty_food/core/constants/app_colors.dart';
 
 void main() {
   runApp(
@@ -19,8 +20,13 @@ class MyApp extends StatelessWidget {
       title: 'Tasty Food',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primaryGreen,
+          primary: AppColors.primaryGreen,
+          secondary: AppColors.primaryOrange,
+        ),
         useMaterial3: true,
+        scaffoldBackgroundColor: AppColors.bgGrey,
       ),
       // L'animation s'affiche en tout premier
       home: const WelcomeAnimationScreen(),

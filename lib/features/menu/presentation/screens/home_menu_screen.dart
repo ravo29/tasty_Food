@@ -312,7 +312,7 @@ class HomeMenuScreen extends ConsumerWidget {
                         final String id = dish.id;
                         final String name = dish.name;
                         final String imageUrl = dish.image;
-                        final double price = double.tryParse(dish.price) ?? 0.0;
+                        final double price = dish.price;
                         final String calories = dish.calories;
 
                         final bool isFav = favoriteIds.contains(id);

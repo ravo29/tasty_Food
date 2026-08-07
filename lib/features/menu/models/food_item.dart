@@ -2,7 +2,7 @@ class FoodItem {
   final String id;
   final String name;
   final String category;
-  final String price;
+  final double price;
   final String image;
   final String description;
   final String calories;
@@ -36,7 +36,7 @@ class FoodItem {
     String? id,
     String? name,
     String? category,
-    String? price,
+    double? price,
     String? image,
     String? description,
     String? calories,
