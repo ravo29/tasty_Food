@@ -11,10 +11,13 @@ class FavoritesNotifier extends StateNotifier<List<String>> {
   Future<void> _loadFavorites() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      final savedFavorites = prefs.getStringList('favorite_ids');
       if (mounted) {
-        state = prefs.getStringList('favorite_ids') ?? [];
+        state = savedFavorites ?? [];
       }
-    } catch (_) {
+    } catch (e) {
+      // Log error for debugging
+      print('Error loading favorites: $e');
       if (mounted) {
         state = [];
       }
@@ -25,7 +28,10 @@ class FavoritesNotifier extends StateNotifier<List<String>> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setStringList('favorite_ids', favorites);
-    } catch (_) {}
+    } catch (e) {
+      // Log error for debugging
+      print('Error saving favorites: $e');
+    }
   }
 
   void toggleFavorite(String productId) {
@@ -51,7 +57,14 @@ final favoriteDishesProvider = Provider<AsyncValue<List<FoodItem>>>((ref) {
   final favoriteIds = ref.watch(favoriteIdsProvider);
   final asyncFoods = ref.watch(foodListProvider);
 
-  return asyncFoods.whenData((foods) {
-    return foods.where((food) => favoriteIds.contains(food.id)).toList();
-  });
+  return asyncFoods.when(
+    data: (foods) {
+      return foods.where((food) => favoriteIds.contains(food.id)).toList();
+    },
+    loading: () => [], // Return empty list while loading
+    error: (error, stack) {
+      print('Error in favoriteDishesProvider: $error');
+      return []; // Return empty list on error
+    },
+  );
 });

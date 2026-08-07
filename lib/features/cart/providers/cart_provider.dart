@@ -3,19 +3,19 @@ import 'package:tasty_food/features/cart/models/cart_item.dart';
 
 class CartNotifier extends StateNotifier<List<CartItem>> {
   CartNotifier()
-      : super([
+      : super(const [
           CartItem(
             id: '1',
             name: 'Cappuccino',
             price: 3.45,
-            imageUrl: 'assets/images/RoastChicken.png',
+            imageUrl: 'assets/images/Cappuccino.png',
             quantity: 1,
           ),
           CartItem(
             id: '2',
             name: 'Iced Latte Frappe',
             price: 2.50,
-            imageUrl: 'assets/images/RoastChicken.png',
+            imageUrl: 'assets/images/IcedLatte.png',
             quantity: 1,
           ),
         ]);

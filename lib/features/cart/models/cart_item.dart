@@ -1,11 +1,17 @@
+/// CartItem représente un produit dans le panier d'achat.
+/// 
+/// Note architecturale : CartItem contient imageUrl qui est une préoccupation UI.
+/// Une refactorisation future pourrait faire référence à FoodItem directement,
+/// mais l'approche actuelle est pragmatique pour éviter les dépendances cycliques
+/// entre features (cart et menu) et simplifier l'affichage UI du panier.
 class CartItem {
   final String id;
   final String name;
   final double price;
-  final String imageUrl;
+  final String imageUrl; // URL de l'image pour l'affichage UI
   final int quantity;
 
-  CartItem({
+  const CartItem({
     required this.id,
     required this.name,
     required this.price,

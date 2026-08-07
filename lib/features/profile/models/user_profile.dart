@@ -4,7 +4,7 @@ class UserProfile {
   final String avatarUrl;
   final bool isVerified;
 
-  UserProfile({
+  const UserProfile({
     required this.name,
     required this.email,
     required this.avatarUrl,

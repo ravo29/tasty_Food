@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static final ThemeData lightTheme = ThemeData(
-    primarySwatch: Colors.red,
-    scaffoldBackgroundColor: Colors.white,
-    textTheme: ThemeData.light().textTheme,
-  );
+  static ThemeData get lightTheme {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primaryGreen,
+        primary: AppColors.primaryGreen,
+        secondary: AppColors.primaryOrange,
+      ),
+      useMaterial3: true,
+      scaffoldBackgroundColor: AppColors.bgGrey,
+      textTheme: ThemeData.light().textTheme,
+    );
+  }
 }
