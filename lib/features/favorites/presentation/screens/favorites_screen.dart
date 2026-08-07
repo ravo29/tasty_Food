@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Import du provider dédié aux favoris
 import 'package:tasty_food/features/favorites/providers/favorites_provider.dart';
-// Import du provider principal pour pouvoir modifier l'état des favoris (toggle)
-import 'package:tasty_food/features/menu/providers/food_list_provider.dart';
 
 // Import des widgets et écrans
 import 'package:tasty_food/features/menu/presentation/widgets/food_card.dart';
@@ -17,8 +15,8 @@ class FavoritesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const Color bgGrey = Color(0xFFF7F7F7);
 
-    // Écoute directe du provider filtré des favoris
-    final favoriteDishes = ref.watch(favoritesProvider);
+    // Écoute directe du provider filtré qui retourne AsyncValue<List<FoodItem>>
+    final asyncFavoriteDishes = ref.watch(favoriteDishesProvider);
 
     return Scaffold(
       backgroundColor: bgGrey,
@@ -31,7 +29,6 @@ class FavoritesScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Bouton retour affiché uniquement si la page a été poussée (Navigator.push)
                   if (Navigator.of(context).canPop())
                     Container(
                       decoration: const BoxDecoration(
@@ -39,7 +36,8 @@ class FavoritesScreen extends ConsumerWidget {
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+                        icon: const Icon(Icons.arrow_back_ios_new,
+                            color: Colors.black, size: 20),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     )
@@ -61,7 +59,8 @@ class FavoritesScreen extends ConsumerWidget {
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
-                      icon: const Icon(Icons.notifications_none_rounded, color: Colors.black),
+                      icon: const Icon(Icons.notifications_none_rounded,
+                          color: Colors.black),
                       onPressed: () {},
                     ),
                   ),
@@ -70,10 +69,12 @@ class FavoritesScreen extends ConsumerWidget {
 
               const SizedBox(height: 20),
 
-              // --- Liste / Grille des plats favoris ---
+              // --- Liste / Grille des plats favoris via AsyncValue ---
               Expanded(
-                child: favoriteDishes.isEmpty
-                    ? Center(
+                child: asyncFavoriteDishes.when(
+                  data: (favoriteDishes) {
+                    if (favoriteDishes.isEmpty) {
+                      return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -93,34 +94,48 @@ class FavoritesScreen extends ConsumerWidget {
                             ),
                           ],
                         ),
-                      )
-                    : GridView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: favoriteDishes.length,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 14,
-                          childAspectRatio: 0.8,
-                        ),
-                        itemBuilder: (context, index) {
-                          final dish = favoriteDishes[index];
-                          return FoodCard(
-                            dish: dish,
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => FoodDetailScreen(dish: dish.toMap()),
-                                ),
-                              );
-                            },
-                            onFavoriteToggle: () {
-                              // Modification de l'état via le foodListProvider
-                              ref.read(foodListProvider.notifier).toggleFavorite(dish.id);
-                            },
-                          );
-                        },
+                      );
+                    }
+
+                    return GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: favoriteDishes.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 14,
+                        childAspectRatio: 0.8,
                       ),
+                      itemBuilder: (context, index) {
+                        final dish = favoriteDishes[index];
+                        return FoodCard(
+                          dish: dish,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    FoodDetailScreen(dish: dish.toMap()),
+                              ),
+                            );
+                          },
+                          onFavoriteToggle: () {
+                            // Bascule l'état du favori via favoriteIdsProvider
+                            ref
+                                .read(favoriteIdsProvider.notifier)
+                                .toggleFavorite(dish.id);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
+                  ),
+                  error: (err, stack) => Center(
+                    child: Text('Erreur : $err'),
+                  ),
+                ),
               ),
             ],
           ),
