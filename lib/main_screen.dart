@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:tasty_food/features/menu/presentation/screens/home_menu_screen.dart';
 import 'package:tasty_food/features/favorites/presentation/screens/favorites_screen.dart';
-import 'package:tasty_food/features/cart/presentation/screens/cart_screen.dart'; // Import désormais utilisé !
+import 'package:tasty_food/features/cart/presentation/screens/cart_screen.dart';
+import 'package:tasty_food/features/profile/presentation/screens/profile_screen.dart'; // Import Profile
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,8 +18,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = const [
     HomeMenuScreen(),     // Index 0 : Accueil
     FavoritesScreen(),    // Index 1 : Favoris
-    CartScreen(),         // Index 2 : Panier (CartScreen est bien appelé ici)
-    Center(child: Text('Profile Screen')), // Index 3 : Profil
+    CartScreen(),         // Index 2 : Panier
+    ProfileScreen(),      // Index 3 : Profil
   ];
 
   @override
