@@ -115,5 +115,23 @@ void main() {
       // Total: 5.95
       expect(subTotal, closeTo(5.95, 0.01));
     });
+
+    test('cartSubtotalProvider should calculate correct subtotal', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      final subTotal = container.read(cartSubtotalProvider);
+      
+      expect(subTotal, closeTo(5.95, 0.01));
+    });
+
+    test('cartItemCountProvider should calculate correct item count', () {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      final itemCount = container.read(cartItemCountProvider);
+      
+      expect(itemCount, 2); // 1 + 1 = 2 items
+    });
   });
 }

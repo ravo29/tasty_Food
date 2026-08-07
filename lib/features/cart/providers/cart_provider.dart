@@ -49,12 +49,25 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
         if (item.id == id) item.copyWith(quantity: quantity) else item
     ];
   }
-   void clearCart() {
+  
+  void clearCart() {
     state = [];
   }
+  
+  // Derived values calculés à partir de l'état
   double get subTotal => state.fold(0, (sum, item) => sum + (item.price * item.quantity));
+  int get itemCount => state.fold(0, (sum, item) => sum + item.quantity);
 }
 
 final cartProvider = StateNotifierProvider<CartNotifier, List<CartItem>>((ref) {
   return CartNotifier();
+});
+
+// Providers séparés pour les valeurs dérivées
+final cartSubtotalProvider = Provider<double>((ref) {
+  return ref.watch(cartProvider.notifier).subTotal;
+});
+
+final cartItemCountProvider = Provider<int>((ref) {
+  return ref.watch(cartProvider.notifier).itemCount;
 });
