@@ -69,10 +69,12 @@ class FavoritesScreen extends ConsumerWidget {
 
               const SizedBox(height: 20),
 
-              // --- Liste / Grille des plats favoris via AsyncValue ---
+              // --- Liste / Grille des plats favoris ---
               Expanded(
-                child: asyncFavoriteDishes.when(
-                  data: (favoriteDishes) {
+                child: Builder(
+                  builder: (context) {
+                    final favoriteDishes = asyncFavoriteDishes;
+                    
                     if (favoriteDishes.isEmpty) {
                       return Center(
                         child: Column(
@@ -129,12 +131,6 @@ class FavoritesScreen extends ConsumerWidget {
                       },
                     );
                   },
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
-                  ),
-                  error: (err, stack) => Center(
-                    child: Text('Erreur : $err'),
-                  ),
                 ),
               ),
             ],

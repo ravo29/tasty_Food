@@ -8,30 +8,34 @@ final searchQueryProvider = StateProvider<String>((ref) => '');
 
 final menuProductsProvider = foodListProvider;
 
-final filteredMenuProvider = Provider<AsyncValue<List<FoodItem>>>((ref) {
+final filteredMenuProvider = Provider<List<FoodItem>>((ref) {
   final asyncProducts = ref.watch(menuProductsProvider);
   final category = ref.watch(selectedCategoryProvider);
   final sortBy = ref.watch(sortByPriceProvider);
   final searchQuery = ref.watch(searchQueryProvider).trim().toLowerCase();
 
-  return asyncProducts.whenData((products) {
-    List<FoodItem> filtered = category == 'All'
-        ? List.from(products)
-        : products.where((product) => product.category == category).toList();
+  return asyncProducts.when(
+    data: (products) {
+      List<FoodItem> filtered = category == 'All'
+          ? List.from(products)
+          : products.where((product) => product.category == category).toList();
 
-    if (searchQuery.isNotEmpty) {
-      filtered = filtered.where((product) {
-        final name = product.name.toLowerCase();
-        return name.contains(searchQuery);
-      }).toList();
-    }
+      if (searchQuery.isNotEmpty) {
+        filtered = filtered.where((product) {
+          final name = product.name.toLowerCase();
+          return name.contains(searchQuery);
+        }).toList();
+      }
 
-    if (sortBy == 'price_asc') {
-      filtered.sort((a, b) => a.price.compareTo(b.price));
-    } else if (sortBy == 'price_desc') {
-      filtered.sort((a, b) => b.price.compareTo(a.price));
-    }
+      if (sortBy == 'price_asc') {
+        filtered.sort((a, b) => a.price.compareTo(b.price));
+      } else if (sortBy == 'price_desc') {
+        filtered.sort((a, b) => b.price.compareTo(a.price));
+      }
 
-    return filtered;
-  });
+      return filtered;
+    },
+    loading: () => [],
+    error: (_, __) => [],
+  );
 });

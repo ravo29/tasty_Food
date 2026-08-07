@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tasty_food/features/menu/models/food_item.dart';
 
 // FutureProvider simule un appel API ou un chargement JSON asynchrone
-// et retourne un AsyncValue<List<FoodItem>> dans l'UI
+// et retourne un AsyncValue<List<FoodItem>> dans l'UI via .watch()
+// L'utilisation de FutureProvider garantit une gestion automatique des états loading/error
 final foodListProvider = FutureProvider<List<FoodItem>>((ref) async {
   // Simulation d'un temps de chargement réseau/base de données (1 seconde)
   await Future.delayed(const Duration(seconds: 1));

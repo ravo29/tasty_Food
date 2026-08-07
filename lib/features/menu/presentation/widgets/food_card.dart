@@ -112,7 +112,7 @@ class FoodCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      dish.price,
+                      '\$${dish.price.toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,
