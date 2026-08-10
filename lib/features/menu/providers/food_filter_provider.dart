@@ -80,21 +80,20 @@ final filteredFoodListProvider = Provider<AsyncValue<List<FoodItem>>>((ref) {
           .toList();
     }
 
-    // C. Tri par prix
-    if (filter.sortBy == 'price_asc') {
-      filtered.sort((a, b) {
-        final priceA = double.tryParse(a.price) ?? 0.0;
-        final priceB = double.tryParse(b.price) ?? 0.0;
-        return priceA.compareTo(priceB);
-      });
-    } else if (filter.sortBy == 'price_desc') {
-      filtered.sort((a, b) {
-        final priceA = double.tryParse(a.price) ?? 0.0;
-        final priceB = double.tryParse(b.price) ?? 0.0;
-        return priceB.compareTo(priceA);
-      });
-    }
-
+// C. Tri par prix
+if (filter.sortBy == 'price_asc') {
+  filtered.sort((a, b) {
+    final priceA = a.price;
+    final priceB = b.price;
+    return priceA.compareTo(priceB);
+  });
+} else if (filter.sortBy == 'price_desc') {
+  filtered.sort((a, b) {
+    final priceA = a.price;
+    final priceB = b.price;
+    return priceB.compareTo(priceA);
+  });
+}
     return filtered;
   });
 });
